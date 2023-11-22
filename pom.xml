@@ -17,10 +17,26 @@
     </parent>
 
     <dependencies>
+        <!-- Tess4j -->
         <dependency>
-            <groupId>systems.dmx</groupId>
-            <artifactId>dmx-files</artifactId>
-            <version>5.3.4-SNAPSHOT</version>
+            <groupId>net.sourceforge.tess4j</groupId>
+            <artifactId>tess4j</artifactId>
+            <version>5.8.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>5.13.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.jai-imageio</groupId>
+            <artifactId>jai-imageio-core</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.lept4j</groupId>
+            <artifactId>lept4j</artifactId>
+            <version>1.18.1</version>
         </dependency>
     </dependencies>
 
@@ -32,8 +48,10 @@
                 <configuration>
                     <instructions>
                         <Bundle-Activator>systems.dmx.tesseract.TesseractPlugin</Bundle-Activator>
-                        <Embed-Dependency></Embed-Dependency>
-                        <Import-Package>*</Import-Package>
+                        <Embed-Dependency>tess4j, jna, jai-imageio-core, lept4j</Embed-Dependency>
+                        <Import-Package>
+                            !com.ochafik.lang.jnaerator.runtime, !org.apache.pdfbox.*, !org.jboss.vfs, *
+                        </Import-Package>
                     </instructions>
                 </configuration>
             </plugin>
