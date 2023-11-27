@@ -44,21 +44,33 @@ public class TesseractPlugin extends PluginActivator implements TesseractService
     @Produces(MediaType.TEXT_PLAIN)
     @Override
     public String doOCR(@PathParam("repoPath") String repoPath) {
+        ClassLoader tccl = null;
         try {
             // ImageIO.scanForPlugins();                    // for server environment (?)
             File imageFile = files.getFile(repoPath);
             File dataDir = new File("/usr/local/Cellar/tesseract/5.2.0/share/tessdata");      // TODO: make configurable
             logger.info("### Data dir " + dataDir + ", exists=" + dataDir.exists());
             logger.info("### Reading image file " + imageFile.getAbsolutePath() + ", exists=" + imageFile.exists());
-            ITesseract instance = new Tesseract();          // JNA Interface Mapping
-            // ITesseract instance = new Tesseract1();      // JNA Direct Mapping (?)
-            instance.setDatapath(dataDir.getPath());
-            // instance.setLanguage("eng");
-            String result = instance.doOCR(imageFile);
+            ITesseract tesseract = new Tesseract();         // JNA Interface Mapping
+            // ITesseract tesseract = new Tesseract1();     // JNA Direct Mapping (?)
+            tesseract.setDatapath(dataDir.getPath());
+            // tesseract.setLanguage("eng");
+            //
+            // For the actual OCR process we temporarily switch the thread context class loader to this bundle's class
+            // loader in order to enable Java Image I/O to dynamically load the readers and writers provided by the
+            // jai-imageio-core library, e.g. for TIFF support
+            tccl = Thread.currentThread().getContextClassLoader();      // Thread Context Class Loader
+            ClassLoader bcl = getClass().getClassLoader();              // Bundle Class Loader
+            logger.info("### Classloader\ntccl = " + tccl + "\nbcl  = " + bcl);
+            Thread.currentThread().setContextClassLoader(bcl);
+            //
+            String result = tesseract.doOCR(imageFile);
             logger.info(result);
             return result;
         } catch (Exception e) {
             throw new RuntimeException("OCR failed", e);
+        } finally {
+            Thread.currentThread().setContextClassLoader(tccl);         // Restore original class loader
         }
     }
 }
