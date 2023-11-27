@@ -17,6 +17,11 @@
     </parent>
 
     <dependencies>
+        <dependency>
+            <groupId>systems.dmx</groupId>
+            <artifactId>dmx-files</artifactId>
+            <version>5.3.4-SNAPSHOT</version>
+        </dependency>
         <!-- Tess4j -->
         <dependency>
             <groupId>net.sourceforge.tess4j</groupId>
