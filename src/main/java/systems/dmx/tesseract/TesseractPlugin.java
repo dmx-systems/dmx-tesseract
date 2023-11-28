@@ -61,12 +61,12 @@ public class TesseractPlugin extends PluginActivator implements TesseractService
             // jai-imageio-core library, e.g. for TIFF support
             tccl = Thread.currentThread().getContextClassLoader();      // Thread Context Class Loader
             ClassLoader bcl = getClass().getClassLoader();              // Bundle Class Loader
-            logger.info("### Classloader\ntccl = " + tccl + "\nbcl  = " + bcl);
+            logger.fine("### Classloader\ntccl = " + tccl + "\nbcl  = " + bcl);
             Thread.currentThread().setContextClassLoader(bcl);
             //
-            String result = tesseract.doOCR(imageFile);
-            logger.info(result);
-            return result;
+            String text = tesseract.doOCR(imageFile);
+            logger.info("\"" + text + "\"");
+            return text;
         } catch (Exception e) {
             throw new RuntimeException("OCR failed", e);
         } finally {
