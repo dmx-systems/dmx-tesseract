@@ -8,22 +8,12 @@ import systems.dmx.core.osgi.PluginActivator;
 import systems.dmx.core.service.Inject;
 import systems.dmx.files.FilesService;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import javax.imageio.ImageIO;
+// import javax.imageio.ImageIO;
 import java.io.File;
 import java.util.logging.Logger;
 
 
 
-@Path("/ocr")
 public class TesseractPlugin extends PluginActivator implements TesseractService {
 
     // ------------------------------------------------------------------------------------------------------- Constants
@@ -41,11 +31,8 @@ public class TesseractPlugin extends PluginActivator implements TesseractService
 
     // *** Service ***
 
-    @GET
-    @Path("/{repoPath}")
-    @Produces(MediaType.TEXT_PLAIN)
     @Override
-    public String doOCR(@PathParam("repoPath") String repoPath) {
+    public String doOCR(String repoPath) {
         ClassLoader tccl = null;
         try {
             if (DATA_PATH == null) {
