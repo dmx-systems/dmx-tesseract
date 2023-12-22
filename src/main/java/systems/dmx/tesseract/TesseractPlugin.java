@@ -56,7 +56,7 @@ public class TesseractPlugin extends PluginActivator implements TesseractService
             Thread.currentThread().setContextClassLoader(bcl);
             //
             String text = tesseract.doOCR(imageFile);
-            logger.info("\"" + text + "\"");
+            logger.fine("\"" + text + "\"");
             return text;
         } catch (Exception e) {
             throw new RuntimeException("Tesseract OCR failed", e);
