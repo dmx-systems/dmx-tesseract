@@ -13,14 +13,81 @@
     <parent>
         <groupId>systems.dmx</groupId>
         <artifactId>dmx-plugin</artifactId>
-        <version>5.3.4-SNAPSHOT</version>
+        <version>5.3.5-SNAPSHOT</version>
     </parent>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <dagger.version>2.48.1</dagger.version>
+        <dmx.version>5.3.5-SNAPSHOT</dmx.version>
+        <dmx-sign-up.version>3.2.0-SNAPSHOT</dmx-sign-up.version>
+        <maven-bundle-plugin.version>4.1.0</maven-bundle-plugin.version>
+        <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
+        <mockito.version>4.11.0</mockito.version>
+        <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
+        <sonar-maven-plugin.version>3.10.0.2594</sonar-maven-plugin.version>
+        <junit-jupiter.version>5.9.2</junit-jupiter.version>
+    </properties>
+
+    <profiles>
+        <profile>
+            <!-- Activate this profile to use the docker deployment included in the project -->
+            <id>docker</id>
+            <activation>
+                <property>
+                    <name>env.DMX_DEPLOYMENT</name>
+                    <value>docker</value>
+                </property>
+            </activation>
+            <properties>
+                <dmx.deploy.dir>./deploy/instance/dev/bundle-deploy</dmx.deploy.dir>
+            </properties>
+        </profile>
+        <profile>
+            <id>coverage</id>
+            <properties>
+                <sonar.sources>src/main/java,src/main/resources-static/script</sonar.sources>
+                <sonar.tests>src/test/java,src/test/js</sonar.tests>
+                <sonar.javascript.lcov.reportPaths>coverage/lcov.info</sonar.javascript.lcov.reportPaths>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacoco-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>report</id>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                                <configuration>
+                                    <formats>
+                                        <format>HTML</format>
+                                        <format>XML</format>
+                                    </formats>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
             <groupId>systems.dmx</groupId>
             <artifactId>dmx-files</artifactId>
-            <version>5.3.4-SNAPSHOT</version>
+            <version>5.3.5-SNAPSHOT</version>
         </dependency>
         <!-- Tess4j -->
         <dependency>
